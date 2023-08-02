@@ -46,6 +46,7 @@ export const SearchButton = styled.button.attrs(() => ({
 	height: fit-content;
 	border: 1px solid black;
 	padding: 0.5vw 1vw;
+	font-size: 1vw;
 	border-radius: 10px;
 	font-weight: 600;
 	cursor: pointer;

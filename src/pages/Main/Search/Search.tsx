@@ -10,7 +10,7 @@ const Search: React.FC = () => {
 	return (
 		<>
 			<Container>
-				<Title>Найди пользователя</Title>
+				<Title>Найди пользователя Github</Title>
 				<SearchContainer>
 					<SearchInput />
 					<SearchButton>Найти</SearchButton>

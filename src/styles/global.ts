@@ -19,5 +19,9 @@ button{
     border: none;
 }
 
+ul{
+    list-style-type: none;
+}
+
 
 `;
