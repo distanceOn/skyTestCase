@@ -1,28 +1,39 @@
-import styled from "styled-components";
+import { FC } from "react";
+import { NumberOfPages, Page, PageLink, SelectedPage } from "./styles";
 
-const NumberOfPages = styled.ul`
-	width: fit-content;
-	height: fit-content;
-	display: flex;
-`;
+interface ResultsPagesProps {
+	currentPage: number;
+	totalResults: number;
+	resultsPerPage: number;
+	onPageChange: (page: number) => void;
+}
 
-const Page = styled.li`
-	width: fit-content;
-	height: fit-content;
-`;
+const ResultsPages: FC<ResultsPagesProps> = ({
+	currentPage,
+	totalResults,
+	resultsPerPage,
+	onPageChange,
+}) => {
+	const totalPages = Math.ceil(totalResults / resultsPerPage);
 
-const PageLink = styled.a`
-	text-decoration: none;
-	cursor: pointer;
-`;
+	const handlePageChange = (page: number) => {
+		if (page >= 1 && page <= totalPages) {
+			onPageChange(page);
+		}
+	};
 
-const ResultsPages: React.FC = () => {
 	return (
 		<>
 			<NumberOfPages>
-				{[...Array(3)].map((_, index) => (
+				{[...Array(totalPages)].map((_, index) => (
 					<Page key={index}>
-						<PageLink>{index + 1}</PageLink>
+						<PageLink onClick={() => handlePageChange(index + 1)}>
+							{index + 1 === currentPage ? (
+								<SelectedPage>{index + 1}</SelectedPage>
+							) : (
+								index + 1
+							)}
+						</PageLink>
 					</Page>
 				))}
 			</NumberOfPages>
