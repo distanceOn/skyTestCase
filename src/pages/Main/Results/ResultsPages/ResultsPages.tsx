@@ -1,20 +1,24 @@
 import { FC } from "react";
-import { NumberOfPages, Page, PageLink, SelectedPage } from "./styles";
+import { Arrow, NumberOfPages, Page, PageLink, SelectedPage } from "./styles";
 
 interface ResultsPagesProps {
 	currentPage: number;
-	totalResults: number;
-	resultsPerPage: number;
+	currentPageRange: [number, number];
+	totalPages: number;
 	onPageChange: (page: number) => void;
+	handleRight: () => void;
+	handleLeft: () => void;
 }
 
 const ResultsPages: FC<ResultsPagesProps> = ({
 	currentPage,
-	totalResults,
-	resultsPerPage,
+	currentPageRange,
+	totalPages,
 	onPageChange,
+	handleRight,
+	handleLeft,
 }) => {
-	const totalPages = Math.ceil(totalResults / resultsPerPage);
+	const [startPage, endPage] = currentPageRange;
 
 	const handlePageChange = (page: number) => {
 		if (page >= 1 && page <= totalPages) {
@@ -24,18 +28,21 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 
 	return (
 		<>
+			{" "}
 			<NumberOfPages>
-				{[...Array(totalPages)].map((_, index) => (
+				<Arrow onClick={handleLeft}>←</Arrow>
+				{[...Array(endPage - startPage + 1)].map((_, index) => (
 					<Page key={index}>
-						<PageLink onClick={() => handlePageChange(index + 1)}>
-							{index + 1 === currentPage ? (
-								<SelectedPage>{index + 1}</SelectedPage>
+						<PageLink onClick={() => handlePageChange(index + startPage)}>
+							{index + startPage === currentPage ? (
+								<SelectedPage>{index + startPage}</SelectedPage>
 							) : (
-								index + 1
+								index + startPage
 							)}
 						</PageLink>
 					</Page>
 				))}
+				<Arrow onClick={handleRight}>→</Arrow>
 			</NumberOfPages>
 		</>
 	);

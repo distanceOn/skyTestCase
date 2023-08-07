@@ -33,3 +33,7 @@ export const SelectedPage = styled.span`
 	text-align: center;
 	border-radius: 0.2vw;
 `;
+
+export const Arrow = styled.button`
+	cursor: pointer;
+`;

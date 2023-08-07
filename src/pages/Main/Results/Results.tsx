@@ -37,10 +37,16 @@ const List = styled.ul`
 
 const Results: React.FC = () => {
 	const [usersArray, setUsersArray] = useState<User[]>([]);
+	const [totalPages, setTotalPages] = useState<number>(0);
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [currentPageRange, setCurrentPageRange] = useState<[number, number]>([
+		1, 10,
+	]);
+	const resultsPerPage = 10;
 
 	const fetchData = useCallback(async () => {
 		try {
-			const users = await getAllUsers();
+			const users = await getAllUsers(100);
 			setUsersArray(users);
 		} catch (error) {
 			console.log("Error", error);
@@ -52,13 +58,29 @@ const Results: React.FC = () => {
 		fetchData();
 	}, [fetchData]);
 
-	const [currentPage, setCurrentPage] = useState<number>(1);
+	useEffect(() => {
+		setTotalPages(Math.ceil(usersArray.length / resultsPerPage));
+	}, [usersArray]);
 
-	const resultsPerPage = 10;
+	useEffect(() => {
+		setCurrentPageRange([totalPages - 9, totalPages]);
+	}, [totalPages]);
 
 	const indexOfLastResult = currentPage * resultsPerPage;
 	const indexOfFirstResult = indexOfLastResult - resultsPerPage;
 	const currentResults = usersArray.slice(indexOfFirstResult, indexOfLastResult);
+
+	const handleRight = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage((prev) => prev + 1);
+		}
+	};
+
+	const handleLeft = () => {
+		if (currentPage > 1) {
+			setCurrentPage((prev) => prev - 1);
+		}
+	};
 
 	if (usersArray.length === 0) {
 		return <div>Loading...</div>; // Покажем сообщение о загрузке
@@ -72,10 +94,12 @@ const Results: React.FC = () => {
 				})}
 			</List>
 			<ResultsPages
+				currentPageRange={currentPageRange}
 				currentPage={currentPage}
-				totalResults={usersArray.length}
-				resultsPerPage={resultsPerPage}
+				totalPages={totalPages}
 				onPageChange={(page: number) => setCurrentPage(page)}
+				handleRight={handleRight}
+				handleLeft={handleLeft}
 			/>
 		</>
 	);
