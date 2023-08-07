@@ -1,5 +1,12 @@
 import { FC } from "react";
-import { Arrow, NumberOfPages, Page, PageLink, SelectedPage } from "./styles";
+import {
+	Arrow,
+	LoadButton,
+	NumberOfPages,
+	Page,
+	PageLink,
+	SelectedPage,
+} from "./styles";
 
 interface ResultsPagesProps {
 	currentPage: number;
@@ -8,6 +15,7 @@ interface ResultsPagesProps {
 	onPageChange: (page: number) => void;
 	handleRight: () => void;
 	handleLeft: () => void;
+	handleLoad: () => void;
 }
 
 const ResultsPages: FC<ResultsPagesProps> = ({
@@ -17,6 +25,7 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 	onPageChange,
 	handleRight,
 	handleLeft,
+	handleLoad,
 }) => {
 	const [startPage, endPage] = currentPageRange;
 
@@ -43,6 +52,7 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 					</Page>
 				))}
 				<Arrow onClick={handleRight}>→</Arrow>
+				<LoadButton onClick={handleLoad}>Больше...</LoadButton>
 			</NumberOfPages>
 		</>
 	);

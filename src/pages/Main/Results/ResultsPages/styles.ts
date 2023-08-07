@@ -37,3 +37,5 @@ export const SelectedPage = styled.span`
 export const Arrow = styled.button`
 	cursor: pointer;
 `;
+
+export const LoadButton = styled.button``;

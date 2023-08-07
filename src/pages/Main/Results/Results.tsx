@@ -47,7 +47,7 @@ const Results: React.FC = () => {
 	const fetchData = useCallback(async () => {
 		try {
 			const users = await getAllUsers(100);
-			setUsersArray(users);
+			setUsersArray((prev) => [...prev, ...users]);
 		} catch (error) {
 			console.log("Error", error);
 		}
@@ -63,7 +63,9 @@ const Results: React.FC = () => {
 	}, [usersArray]);
 
 	useEffect(() => {
-		setCurrentPageRange([totalPages - 9, totalPages]);
+		if (totalPages !== 0) {
+			setCurrentPageRange([totalPages - 9, totalPages]);
+		}
 	}, [totalPages]);
 
 	const indexOfLastResult = currentPage * resultsPerPage;
@@ -79,6 +81,26 @@ const Results: React.FC = () => {
 	const handleLeft = () => {
 		if (currentPage > 1) {
 			setCurrentPage((prev) => prev - 1);
+		}
+	};
+
+	useEffect(() => {
+		if (currentPageRange[0] > currentPage) {
+			setCurrentPageRange([currentPage - 9, currentPage]);
+		} else if (
+			currentPageRange[1] < currentPage &&
+			totalPages !== currentPageRange[1]
+		) {
+			setCurrentPageRange([currentPage, currentPage + 9]);
+		}
+	}, [currentPage, currentPageRange, totalPages]);
+
+	const handleLoad = async () => {
+		try {
+			await fetchData();
+			setCurrentPage(currentPageRange[1] + 1);
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -100,6 +122,7 @@ const Results: React.FC = () => {
 				onPageChange={(page: number) => setCurrentPage(page)}
 				handleRight={handleRight}
 				handleLeft={handleLeft}
+				handleLoad={handleLoad}
 			/>
 		</>
 	);
