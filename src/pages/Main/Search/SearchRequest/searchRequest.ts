@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const accessToken = "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";
+const accessToken = "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";
 
 const headers = {
 	Authorization: `token ${accessToken}`,
