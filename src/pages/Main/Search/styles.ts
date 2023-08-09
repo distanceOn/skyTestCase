@@ -29,8 +29,9 @@ export const SearchContainer = styled.div`
 
 export const SearchInput = styled.input.attrs(() => ({
 	type: "text",
-	placeholder: "Поиск",
+	placeholder: "Введите логин",
 	id: "search",
+	pattern: "[a-zA-Z0-9]*",
 }))`
 	width: 20vw;
 	height: 1.5vw;

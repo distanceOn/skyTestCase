@@ -22,7 +22,15 @@ const Search: React.FC = () => {
 		fetchUsersByLogin(searchValue);
 	};
 
+	const allowedCharacters = /^[a-zA-Z0-9]*$/;
+
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const inputValue = event.target.value;
+
+		if (!allowedCharacters.test(inputValue)) {
+			return;
+		}
+
 		setSearchValue(event.target.value);
 	};
 	return (
