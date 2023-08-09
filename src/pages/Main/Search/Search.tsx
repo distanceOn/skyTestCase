@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	Container,
 	Title,
@@ -7,9 +8,12 @@ import {
 } from "./styles";
 
 const Search: React.FC = () => {
+	const handleSubmit = (event: React.FormEvent) => {
+		event.preventDefault();
+	};
 	return (
 		<>
-			<Container>
+			<Container onSubmit={handleSubmit}>
 				<Title>Найди пользователя Github</Title>
 				<SearchContainer>
 					<SearchInput />

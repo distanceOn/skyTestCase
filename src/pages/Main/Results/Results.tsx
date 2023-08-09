@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
 import ResultsPages from "./ResultsPages/ResultsPages";
-import { User, getAllUsers } from "../Search/SearchRequest/searchRequest";
-import { useCallback, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import ResultsItem from "./ResultsItem/ResultsItem";
+import SearchContext from "../../../Contexts/searchContext";
 
 const List = styled.ul`
 	width: 30vw;
@@ -36,27 +37,34 @@ const List = styled.ul`
 `;
 
 const Results: React.FC = () => {
-	const [usersArray, setUsersArray] = useState<User[]>([]);
-	const [totalPages, setTotalPages] = useState<number>(0);
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [currentPageRange, setCurrentPageRange] = useState<[number, number]>([
-		1, 10,
-	]);
-	const resultsPerPage = 10;
-
-	const fetchData = useCallback(async () => {
-		try {
-			const users = await getAllUsers(100);
-			setUsersArray((prev) => [...prev, ...users]);
-		} catch (error) {
-			console.log("Error", error);
-		}
-	}, []);
+	const {
+		usersArray,
+		totalPages,
+		setTotalPages,
+		currentPage,
+		setCurrentPage,
+		currentPageRange,
+		setCurrentPageRange,
+		resultsPerPage,
+		fetchAllUsers,
+		currentResults,
+	} = useContext(SearchContext) ?? {
+		usersArray: [],
+		totalPages: 0,
+		setTotalPages: () => {},
+		currentPage: 1,
+		setCurrentPage: () => {},
+		currentPageRange: [1, 10],
+		setCurrentPageRange: () => {},
+		resultsPerPage: 10,
+		fetchAllUsers: () => {},
+		currentResults: [],
+	};
 
 	useEffect(() => {
 		console.log("UseEffect!");
-		fetchData();
-	}, [fetchData]);
+		fetchAllUsers();
+	}, [fetchAllUsers]);
 
 	useEffect(() => {
 		setTotalPages(Math.ceil(usersArray.length / resultsPerPage));
@@ -67,10 +75,6 @@ const Results: React.FC = () => {
 			setCurrentPageRange([totalPages - 9, totalPages]);
 		}
 	}, [totalPages]);
-
-	const indexOfLastResult = currentPage * resultsPerPage;
-	const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-	const currentResults = usersArray.slice(indexOfFirstResult, indexOfLastResult);
 
 	const handleRight = () => {
 		if (currentPage < totalPages) {
@@ -97,7 +101,7 @@ const Results: React.FC = () => {
 
 	const handleLoad = async () => {
 		try {
-			await fetchData();
+			await fetchAllUsers();
 			setCurrentPage(currentPageRange[1] + 1);
 		} catch (error) {
 			console.log(error);

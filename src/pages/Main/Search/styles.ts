@@ -26,6 +26,7 @@ export const SearchContainer = styled.div`
 	justify-content: space-around;
 	align-items: center;
 `;
+
 export const SearchInput = styled.input.attrs(() => ({
 	type: "text",
 	placeholder: "Поиск",

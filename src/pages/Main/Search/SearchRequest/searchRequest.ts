@@ -7,11 +7,11 @@ export interface User {
 	repos_url: string;
 }
 
-export const getOneUser = async (login: string): Promise<User> => {
-	const requestOneUser = `https://api.github.com/users/${login}`;
+export const getUsersByLogin = async (login: string): Promise<User[]> => {
+	const requestUsersByLogin = `https://api.github.com/search/users?q=${login}+in:login`;
 
 	try {
-		const response = await axios.get(requestOneUser);
+		const response = await axios.get(requestUsersByLogin);
 		return response.data;
 	} catch (error) {
 		console.log("Error", error);
