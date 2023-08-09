@@ -16,6 +16,7 @@ interface ResultsPagesProps {
 	handleRight: () => void;
 	handleLeft: () => void;
 	handleLoad: () => void;
+	searchIsRun: boolean;
 }
 
 const ResultsPages: FC<ResultsPagesProps> = ({
@@ -26,8 +27,13 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 	handleRight,
 	handleLeft,
 	handleLoad,
+	searchIsRun,
 }) => {
 	const [startPage, endPage] = currentPageRange;
+
+	const visiblePageNumbers = [...Array(endPage - startPage + 1)].map(
+		(_, index) => index + startPage
+	);
 
 	const handlePageChange = (page: number) => {
 		if (page >= 1 && page <= totalPages) {
@@ -40,19 +46,19 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 			{" "}
 			<NumberOfPages>
 				<Arrow onClick={handleLeft}>←</Arrow>
-				{[...Array(endPage - startPage + 1)].map((_, index) => (
-					<Page key={index}>
-						<PageLink onClick={() => handlePageChange(index + startPage)}>
-							{index + startPage === currentPage ? (
-								<SelectedPage>{index + startPage}</SelectedPage>
+				{visiblePageNumbers.map((pageNumber) => (
+					<Page key={pageNumber}>
+						<PageLink onClick={() => handlePageChange(pageNumber)}>
+							{pageNumber === currentPage ? (
+								<SelectedPage>{pageNumber}</SelectedPage>
 							) : (
-								index + startPage
+								pageNumber
 							)}
 						</PageLink>
 					</Page>
 				))}
 				<Arrow onClick={handleRight}>→</Arrow>
-				<LoadButton onClick={handleLoad}>Больше...</LoadButton>
+				{searchIsRun ? "" : <LoadButton onClick={handleLoad}>Больше...</LoadButton>}
 			</NumberOfPages>
 		</>
 	);

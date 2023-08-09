@@ -1,13 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
 	Dispatch,
 	SetStateAction,
 	createContext,
 	useCallback,
+	useEffect,
 	useState,
 } from "react";
 import {
 	User,
 	getAllUsers,
+	getUsersByLogin,
 } from "../pages/Main/Search/SearchRequest/searchRequest";
 
 interface SharedState {
@@ -19,8 +22,12 @@ interface SharedState {
 	currentPageRange: [number, number];
 	setCurrentPageRange: Dispatch<SetStateAction<[number, number]>>;
 	resultsPerPage: number;
-	fetchAllUsers: () => Promise<void>;
+	fetchAllUsers: (newList: boolean) => Promise<void>;
 	currentResults: User[];
+	searchValue: string;
+	setSearchValue: Dispatch<SetStateAction<string>>;
+	fetchUsersByLogin: (login: string) => Promise<void>;
+	searchIsRun: boolean;
 }
 
 const SearchContext = createContext<SharedState | undefined>(undefined);
@@ -36,18 +43,95 @@ export function SearchContextProvider({
 	]);
 	const resultsPerPage = 10;
 
-	const indexOfLastResult = currentPage * resultsPerPage;
-	const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-	const currentResults = usersArray.slice(indexOfFirstResult, indexOfLastResult);
+	const [indexOfLastResult, setIndexOfLastResult] = useState<number>(
+		currentPage * resultsPerPage
+	);
+	useEffect(() => {
+		setIndexOfLastResult(currentPage * resultsPerPage);
+	}, [currentPage]);
 
-	const fetchAllUsers = useCallback(async () => {
+	const [indexOfFirstResult, setIndexOfFirstResult] = useState<number>(
+		indexOfLastResult - resultsPerPage
+	);
+
+	useEffect(() => {
+		setIndexOfFirstResult(indexOfLastResult - resultsPerPage);
+	}, [indexOfLastResult]);
+
+	const [currentResults, setCurrentResults] = useState<User[]>(
+		usersArray.slice(indexOfFirstResult, indexOfLastResult)
+	);
+	useEffect(() => {
+		if (Array.isArray(usersArray)) {
+			setCurrentResults(usersArray.slice(indexOfFirstResult, indexOfLastResult));
+		}
+	}, [indexOfFirstResult, indexOfLastResult, usersArray]);
+
+	const [searchValue, setSearchValue] = useState<string>("");
+
+	const [searchIsRun, setSearchIsRun] = useState<boolean>(false);
+
+	const fetchAllUsers = useCallback(async (newList: boolean) => {
 		try {
 			const users = await getAllUsers(100);
-			setUsersArray((prev) => [...prev, ...users]);
+
+			if (newList) {
+				setUsersArray(users);
+			} else {
+				setUsersArray((prev) => [...prev, ...users]);
+			}
+			setSearchIsRun(false);
 		} catch (error) {
 			console.log("Error", error);
 		}
 	}, []);
+
+	const fetchUsersByLogin = useCallback(
+		async (login: string = searchValue) => {
+			try {
+				if (searchValue === "") {
+					const users = await getAllUsers(100);
+
+					setUsersArray(users);
+					setCurrentPage(1);
+				} else {
+					const users = await getUsersByLogin(login);
+					setSearchIsRun(true);
+					setCurrentPage(1);
+					setUsersArray(users);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[searchIsRun, searchValue]
+	);
+
+	useEffect(() => {
+		if (searchValue === "" && searchIsRun === true) {
+			fetchAllUsers(true);
+		}
+	}, [searchValue, searchIsRun]);
+
+	useEffect(() => {
+		setTotalPages(Math.ceil(usersArray.length / resultsPerPage));
+	}, [usersArray]);
+
+	useEffect(() => {
+		if (totalPages >= 10 && totalPages % 10 === 0) {
+			setCurrentPageRange([totalPages - 9, totalPages]);
+		} else if (totalPages < 10) {
+			setCurrentPageRange([totalPages - (totalPages - 1), totalPages]);
+		}
+	}, [totalPages]);
+
+	useEffect(() => {
+		if (currentPageRange[0] > currentPage && totalPages % 10 === 0) {
+			setCurrentPageRange([currentPage - 9, currentPage]);
+		} else if (currentPageRange[1] < currentPage && totalPages % 10 === 0) {
+			setCurrentPageRange([currentPage, currentPage + 9]);
+		}
+	}, [currentPage]);
 
 	const sharedState: SharedState = {
 		usersArray,
@@ -60,6 +144,10 @@ export function SearchContextProvider({
 		resultsPerPage,
 		fetchAllUsers,
 		currentResults,
+		searchValue,
+		setSearchValue,
+		fetchUsersByLogin,
+		searchIsRun,
 	};
 
 	return (

@@ -8,11 +8,11 @@ export interface User {
 }
 
 export const getUsersByLogin = async (login: string): Promise<User[]> => {
-	const requestUsersByLogin = `https://api.github.com/search/users?q=${login}+in:login`;
+	const requestUsersByLogin = `https://api.github.com/search/users?q=${login}+in:login&per_page=100`;
 
 	try {
 		const response = await axios.get(requestUsersByLogin);
-		return response.data;
+		return response.data.items;
 	} catch (error) {
 		console.log("Error", error);
 		throw error;
@@ -24,7 +24,6 @@ export const getAllUsers = async (count: number): Promise<User[]> => {
 
 	try {
 		const response = await axios.get(requestAllUsers);
-		console.log(response.data.items);
 		return response.data.items;
 	} catch (error) {
 		console.log("Error", error);

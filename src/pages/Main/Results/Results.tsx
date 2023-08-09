@@ -40,41 +40,27 @@ const Results: React.FC = () => {
 	const {
 		usersArray,
 		totalPages,
-		setTotalPages,
 		currentPage,
 		setCurrentPage,
 		currentPageRange,
-		setCurrentPageRange,
-		resultsPerPage,
 		fetchAllUsers,
 		currentResults,
+		searchIsRun,
 	} = useContext(SearchContext) ?? {
 		usersArray: [],
 		totalPages: 0,
-		setTotalPages: () => {},
 		currentPage: 1,
 		setCurrentPage: () => {},
 		currentPageRange: [1, 10],
-		setCurrentPageRange: () => {},
-		resultsPerPage: 10,
 		fetchAllUsers: () => {},
 		currentResults: [],
+		searchIsRun: false,
 	};
 
 	useEffect(() => {
 		console.log("UseEffect!");
-		fetchAllUsers();
+		fetchAllUsers(true);
 	}, [fetchAllUsers]);
-
-	useEffect(() => {
-		setTotalPages(Math.ceil(usersArray.length / resultsPerPage));
-	}, [usersArray]);
-
-	useEffect(() => {
-		if (totalPages !== 0) {
-			setCurrentPageRange([totalPages - 9, totalPages]);
-		}
-	}, [totalPages]);
 
 	const handleRight = () => {
 		if (currentPage < totalPages) {
@@ -88,20 +74,9 @@ const Results: React.FC = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (currentPageRange[0] > currentPage) {
-			setCurrentPageRange([currentPage - 9, currentPage]);
-		} else if (
-			currentPageRange[1] < currentPage &&
-			totalPages !== currentPageRange[1]
-		) {
-			setCurrentPageRange([currentPage, currentPage + 9]);
-		}
-	}, [currentPage, currentPageRange, totalPages]);
-
 	const handleLoad = async () => {
 		try {
-			await fetchAllUsers();
+			await fetchAllUsers(false);
 			setCurrentPage(currentPageRange[1] + 1);
 		} catch (error) {
 			console.log(error);
@@ -127,6 +102,7 @@ const Results: React.FC = () => {
 				handleRight={handleRight}
 				handleLeft={handleLeft}
 				handleLoad={handleLoad}
+				searchIsRun={searchIsRun}
 			/>
 		</>
 	);
