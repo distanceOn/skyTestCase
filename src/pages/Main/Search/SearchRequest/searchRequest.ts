@@ -26,6 +26,20 @@ export const getUsersByLogin = async (login: string): Promise<User[]> => {
 	}
 };
 
+export const getUserCountOfRepos = async (url: string): Promise<number> => {
+	try {
+		const data = await axios.get(url + `?per_page=100`, {
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+
+		console.log(data);
+		return data.data.length;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+};
+
 export const getAllUsers = async (count: number): Promise<User[]> => {
 	const requestAllUsers = `https://api.github.com/search/users?q=type:user&per_page=${count}`;
 
