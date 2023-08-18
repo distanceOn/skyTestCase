@@ -1,8 +1,5 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import {
-	User,
-	getUserCountOfRepos,
-} from "../../Search/SearchRequest/searchRequest";
+import { FC, useEffect, useState } from "react";
+import { User } from "../../Search/SearchRequest/searchRequest";
 import {
 	Avatar,
 	Link,
@@ -22,24 +19,21 @@ const ResultsItem: FC<ResultsItemProps> = ({ user }) => {
 	const [reposCount, setReposCount] = useState<number | null>(null);
 	const [avatarRef, setAvatarRef] = useState<string | null>(null);
 
-	const fetchCountOfRepos = useCallback(async (url: string) => {
-		try {
-			const count = await getUserCountOfRepos(url);
-			setReposCount(count);
-		} catch (error) {
-			console.log(error);
+	const refetchCountProps = () => {
+		if (typeof user.repos_count === "number") {
+			setReposCount(user.repos_count);
+		} else {
+			setTimeout(() => {
+				refetchCountProps();
+			}, 500);
 		}
-	}, []);
-
-	useEffect(() => {
-		setReposCount(null);
-		setAvatarRef(null);
-	}, [user]);
+	};
 
 	useEffect(() => {
 		setAvatarRef(user.avatar_url);
-		fetchCountOfRepos(user.repos_url);
-	}, [fetchCountOfRepos, user.avatar_url, user.repos_url]);
+		console.log(typeof reposCount, typeof user.repos_count);
+		refetchCountProps();
+	}, [user.avatar_url, user.repos_count]);
 
 	return (
 		<>

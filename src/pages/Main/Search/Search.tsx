@@ -5,16 +5,25 @@ import {
 	SearchContainer,
 	SearchInput,
 	SearchButton,
+	RadioContainer,
+	RadioLabel,
+	RadioInput,
 } from "./styles";
 import SearchContext from "../../../Contexts/searchContext";
 
 const Search: React.FC = () => {
-	const { searchValue, setSearchValue, fetchUsersByLogin } = useContext(
-		SearchContext
-	) ?? {
+	const {
+		searchValue,
+		setSearchValue,
+		fetchUsersByLogin,
+		selectedOption,
+		handleRadioChange,
+	} = useContext(SearchContext) ?? {
 		searchValue: "",
 		setSearchValue: () => {},
 		fetchUsersByLogin: () => {},
+		selectedOption: null,
+		handleRadioChange: () => {},
 	};
 
 	const handleSubmit = (event: React.FormEvent) => {
@@ -33,6 +42,7 @@ const Search: React.FC = () => {
 
 		setSearchValue(event.target.value);
 	};
+
 	return (
 		<>
 			<Container onSubmit={handleSubmit}>
@@ -40,6 +50,30 @@ const Search: React.FC = () => {
 				<SearchContainer>
 					<SearchInput value={searchValue} onChange={handleInputChange} />
 					<SearchButton>Найти</SearchButton>
+					<RadioContainer>
+						<RadioLabel>
+							<RadioInput
+								type="radio"
+								name="sort"
+								value="asc"
+								onChange={handleRadioChange}
+								onClick={handleRadioChange}
+								checked={selectedOption === "asc"}
+							/>
+							По возрастанию
+						</RadioLabel>
+						<RadioLabel>
+							<RadioInput
+								type="radio"
+								name="sort"
+								value="desc"
+								onClick={handleRadioChange}
+								checked={selectedOption === "desc"}
+								onChange={handleRadioChange}
+							/>
+							По убыванию
+						</RadioLabel>
+					</RadioContainer>
 				</SearchContainer>
 			</Container>
 		</>

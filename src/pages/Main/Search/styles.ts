@@ -19,12 +19,12 @@ export const Title = styled.label.attrs(() => ({
 `;
 
 export const SearchContainer = styled.div`
-	width: 40vw;
+	width: 35vw;
 	height: 5vw;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
+	justify-content: center;
 	align-items: center;
+	gap: 1vw;
 `;
 
 export const SearchInput = styled.input.attrs(() => ({
@@ -33,7 +33,7 @@ export const SearchInput = styled.input.attrs(() => ({
 	id: "search",
 	pattern: "[a-zA-Z0-9]*",
 }))`
-	width: 20vw;
+	width: 15vw;
 	height: 1.5vw;
 	padding: 1vw;
 	border: 1px solid black;
@@ -57,4 +57,25 @@ export const SearchButton = styled.button.attrs(() => ({
 		background-color: red;
 		color: yellow;
 	}
+`;
+
+export const RadioContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	height: fit-content;
+`;
+
+export const RadioLabel = styled.label`
+	font-size: 1vw;
+	height: fit-content;
+`;
+
+export const RadioInput = styled.input.attrs(() => ({
+	type: "radio",
+}))`
+	width: fit-content;
+	height: fit-content;
 `;

@@ -28,6 +28,10 @@ interface SharedState {
 	setSearchValue: Dispatch<SetStateAction<string>>;
 	fetchUsersByLogin: (login: string) => Promise<void>;
 	searchIsRun: boolean;
+	selectedOption: string | null;
+	handleRadioChange: (
+		event: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>
+	) => void;
 }
 
 const SearchContext = createContext<SharedState | undefined>(undefined);
@@ -71,6 +75,22 @@ export function SearchContextProvider({
 
 	const [searchIsRun, setSearchIsRun] = useState<boolean>(false);
 
+	const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+	const handleRadioChange = (
+		event: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>
+	) => {
+		if (selectedOption !== null) {
+			if (selectedOption === event.currentTarget.value) {
+				setSelectedOption(null);
+			} else {
+				setSelectedOption(event.currentTarget.value);
+			}
+		} else {
+			setSelectedOption(event.currentTarget.value);
+		}
+	};
+
 	const fetchAllUsers = useCallback(async (newList: boolean) => {
 		try {
 			const users = await getAllUsers(100);
@@ -78,7 +98,7 @@ export function SearchContextProvider({
 			if (newList) {
 				setUsersArray(users);
 			} else {
-				setUsersArray((prev) => [...prev, ...users]);
+				setUsersArray((prevUsersArray) => [...prevUsersArray, ...users]);
 			}
 			setSearchIsRun(false);
 		} catch (error) {
@@ -133,6 +153,44 @@ export function SearchContextProvider({
 		}
 	}, [currentPage]);
 
+	const getShuffledUsers = (add: User[]) => {
+		console.log(add);
+		let shuffledUsers = [...add];
+
+		// Алгоритм случайной перестановки (Fisher-Yates shuffle)
+		for (let i = shuffledUsers.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffledUsers[i], shuffledUsers[j]] = [shuffledUsers[j], shuffledUsers[i]];
+		}
+
+		if (selectedOption === "desc") {
+			shuffledUsers.sort((a, b) => {
+				if (a.repos_count === null) return 1;
+				if (b.repos_count === null) return -1;
+				return b.repos_count - a.repos_count;
+			});
+		} else if (selectedOption === "asc") {
+			shuffledUsers.sort((a, b) => {
+				if (a.repos_count === null) return 1;
+				if (b.repos_count === null) return -1;
+				return a.repos_count - b.repos_count;
+			});
+		}
+		return shuffledUsers;
+	};
+
+
+	useEffect(()=>{
+		if(selectedOption !== null){
+			setSelectedOption(null);
+			setUsersArray(getShuffledUsers(usersArray));
+		}
+	}, [usersArray.length])
+
+	useEffect(() => {
+		setUsersArray(getShuffledUsers(usersArray));
+	}, [selectedOption]);
+
 	const sharedState: SharedState = {
 		usersArray,
 		totalPages,
@@ -148,6 +206,8 @@ export function SearchContextProvider({
 		setSearchValue,
 		fetchUsersByLogin,
 		searchIsRun,
+		selectedOption,
+		handleRadioChange,
 	};
 
 	return (
