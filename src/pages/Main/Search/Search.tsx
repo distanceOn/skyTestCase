@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	Container,
 	Title,
@@ -13,12 +13,14 @@ import SearchContext from "../../../Contexts/searchContext";
 
 const Search: React.FC = () => {
 	const {
+		usersArray,
 		searchValue,
 		setSearchValue,
 		fetchUsersByLogin,
 		selectedOption,
 		handleRadioChange,
 	} = useContext(SearchContext) ?? {
+		usersArray: [],
 		searchValue: "",
 		setSearchValue: () => {},
 		fetchUsersByLogin: () => {},
@@ -43,13 +45,28 @@ const Search: React.FC = () => {
 		setSearchValue(event.target.value);
 	};
 
+	const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
+	useEffect(()=>{
+		setIsDisabled(true);
+		if(usersArray.length !== 0){
+			setTimeout(() => {
+				setIsDisabled(false);
+			}, 2000);
+		}
+	}, [usersArray.length])
+
+
 	return (
-		<>
-			<Container onSubmit={handleSubmit}>
-				<Title>Найди пользователя Github</Title>
-				<SearchContainer>
-					<SearchInput value={searchValue} onChange={handleInputChange} />
-					<SearchButton>Найти</SearchButton>
+	<>
+		<Container onSubmit={handleSubmit}>
+			<Title>Найди пользователя Github</Title>
+			<SearchContainer>
+				<SearchInput value={searchValue} onChange={handleInputChange} />
+				<SearchButton>Найти</SearchButton>
+				{isDisabled ? (
+					<SearchContainer>Загрузка...</SearchContainer>
+				) : (
 					<RadioContainer>
 						<RadioLabel>
 							<RadioInput
@@ -74,10 +91,11 @@ const Search: React.FC = () => {
 							По убыванию
 						</RadioLabel>
 					</RadioContainer>
-				</SearchContainer>
-			</Container>
-		</>
-	);
+				)}
+			</SearchContainer>
+		</Container>
+	</>
+);
 };
 
 export default Search;
