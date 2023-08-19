@@ -57,6 +57,9 @@ const Results: React.FC = () => {
 		searchIsRun: false,
 	};
 
+
+
+
 	useEffect(() => {
 		console.log("UseEffect!");
 		fetchAllUsers(true);

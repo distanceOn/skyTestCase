@@ -36,16 +36,21 @@ const ResultsItem: FC<ResultsItemProps> = ({ user }) => {
 		refetchCountProps();
 	}, [user.avatar_url, user.repos_count]);
 
+	const handleGoUser = () => {
+		if(user.repos_count){
+			navigate(`/:${user.login}`, { state: { user } });
+		}else{
+			console.log("Еще не время");
+		}
+	
+	};
 
 	const navigate = useNavigate();
-
 
 	return (
 		<>
 			<Result title="Перейти в профиль">
-				<Link onClick={()=>{
-					navigate(`/:${user.login}`, {state: {user}});
-				}}>
+				<Link onClick={handleGoUser}>
 					<Avatar
 						src={
 							avatarRef === null || avatarRef !== user.avatar_url ? ProfileIcon : avatarRef

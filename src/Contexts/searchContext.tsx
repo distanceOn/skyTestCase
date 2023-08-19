@@ -13,8 +13,10 @@ import {
 	getUsersByLogin,
 } from "../pages/Main/Search/SearchRequest/searchRequest";
 
+
 interface SharedState {
 	usersArray: User[];
+	setUsersArray: Dispatch<SetStateAction<User[]>>;
 	totalPages: number;
 	setTotalPages: Dispatch<SetStateAction<number>>;
 	currentPage: number;
@@ -191,8 +193,11 @@ export function SearchContextProvider({
 		setUsersArray(getShuffledUsers(usersArray));
 	}, [selectedOption]);
 
+
+
 	const sharedState: SharedState = {
 		usersArray,
+		setUsersArray,
 		totalPages,
 		setTotalPages,
 		currentPage,

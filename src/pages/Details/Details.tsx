@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import SearchContext from "../../Contexts/searchContext";
+import { useContext, useEffect } from "react";
 
 const Wrapper = styled.div`
 	background-color: #198f54;
@@ -19,8 +21,21 @@ const Content = styled.div`
 `;
 
 const Details: React.FC = () => {
+	const {  setUsersArray } = useContext(SearchContext) ?? {
+	
+	setUsersArray: () => {},
+};
+
     const location = useLocation();
     const user = location.state.user;
+
+	useEffect(() => {
+		
+		if(location.pathname !== '/'){
+			setUsersArray([]);
+			
+		}
+	}, [location.pathname])
 
 	return (
 		<>
