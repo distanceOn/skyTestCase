@@ -2,9 +2,7 @@ import axios from "axios";
 
 const accessToken = process.env.VITE_GITHUB_ACCESS_TOKEN;
 
-if (!accessToken) {
-	throw new Error("GitHub access token not found in environment variables.");
-}
+
 export interface User {
 	login: string;
 	avatar_url: string;
