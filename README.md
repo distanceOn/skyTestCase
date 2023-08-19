@@ -10,7 +10,7 @@
 
 Сначала склонируйте репозиторий с GitHub на свой компьютер:
 
-**git clone (https://github.com/distanceOn/skyTestCase.git)[https://github.com/distanceOn/skyTestCase.git]**
+**git clone [https://github.com/distanceOn/skyTestCase.git](https://github.com/distanceOn/skyTestCase.git)**
 
 ### 2. Установка зависимостей
 
