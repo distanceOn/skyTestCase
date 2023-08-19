@@ -1,9 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import App from "./App.tsx";
+import { SearchContextProvider } from "./Contexts/searchContext.tsx";
+import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.render(
 	<React.StrictMode>
-		<App />
-	</React.StrictMode>
+		<SearchContextProvider>
+			{" "}
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</SearchContextProvider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );

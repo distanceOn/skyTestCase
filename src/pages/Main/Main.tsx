@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Search from "./Search/Search";
+import Results from "./Results/Results";
 
 const Wrapper = styled.div`
 	background-color: #198f54;
@@ -11,8 +12,11 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div`
-	width: 80vw;
-	height: 80%;
+	padding: 7vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `;
 
 const Main: React.FC = () => {
@@ -21,6 +25,7 @@ const Main: React.FC = () => {
 			<Wrapper>
 				<Content>
 					<Search />
+					<Results />
 				</Content>
 			</Wrapper>
 		</>
