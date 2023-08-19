@@ -10,6 +10,7 @@ import {
 	Result,
 } from "./styles";
 import ProfileIcon from "../../../../assets/profile-svgrepo-com.svg";
+import { useNavigate } from "react-router-dom";
 
 interface ResultsItemProps {
 	user: User;
@@ -35,10 +36,16 @@ const ResultsItem: FC<ResultsItemProps> = ({ user }) => {
 		refetchCountProps();
 	}, [user.avatar_url, user.repos_count]);
 
+
+	const navigate = useNavigate();
+
+
 	return (
 		<>
 			<Result title="Перейти в профиль">
-				<Link href={user.html_url} target="_blank">
+				<Link onClick={()=>{
+					navigate(`/:${user.login}`, {state: {user}});
+				}}>
 					<Avatar
 						src={
 							avatarRef === null || avatarRef !== user.avatar_url ? ProfileIcon : avatarRef
