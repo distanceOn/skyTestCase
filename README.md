@@ -1,27 +1,46 @@
-# React + TypeScript + Vite
+# skyTestCase
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Тестовое задание карьерного центра SkyPro. Поиск пользователей github.
 
-Currently, two official plugins are available:
+## Запуск проекта локально
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Следуйте этим шагам, чтобы запустить проект локально:
 
-## Expanding the ESLint configuration
+### 1. Клонирование репозитория
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Сначала склонируйте репозиторий с GitHub на свой компьютер:
 
-- Configure the top-level `parserOptions` property like this:
+**git clone (https://github.com/distanceOn/skyTestCase.git)[https://github.com/distanceOn/skyTestCase.git]**
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### 2. Установка зависимостей
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Перейдите в папку проекта и установите все зависимости с помощью npm:
+
+**npm install**
+
+### 3. Получение GitHub Access Token
+
+Перейдите на сайт GitHub и получите Access Token для доступа к GitHub API:
+
+Перейдите в настройки профиля -> Developer settings -> Personal access tokens -> Tokens(classic) -> Generate new token(classic).
+
+Создайте новый токен с правами на доступ к репозиториям:
+
+Введите название токена, а также настройки repo->public_repo, user->read:user
+Нажмите кнопку generate token и скопируйте ваш токен доступа.
+
+4. Создание файла .env
+
+Создайте файл .env по примеру файла **.env.example** в корне проекта и добавьте туда свой GitHub Access Token:
+
+**VITE_GITHUB_ACCESS_TOKEN=ваш-токен**
+
+сохраните файл
+
+5. Запуск проекта
+
+Запустите проект с помощью команды:
+
+**npm run dev**
+
+Проект будет доступен по адресу http://localhost:3000.
