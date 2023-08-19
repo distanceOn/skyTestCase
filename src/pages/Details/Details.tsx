@@ -33,10 +33,11 @@ const Content = styled.div`
 `;
 
 const Details: React.FC = () => {
-	const {  setUsersArray } = useContext(SearchContext) ?? {
-	
+	const { setUsersArray, setSearchValue, setCurrentPage } = useContext(SearchContext) ?? {
 	setUsersArray: () => {},
-};
+	setSearchValue: () => {},
+	setCurrentPage: () => {},}
+;
 
     const location = useLocation();
     const {avatar_url, repos_count, login, html_url} = location.state.user;
@@ -45,6 +46,8 @@ const Details: React.FC = () => {
 	useEffect(() => {
 		if(location.pathname !== '/'){
 			setUsersArray([]);
+			setSearchValue('');
+			setCurrentPage(1);
 			
 		}
 		console.log(user);

@@ -37,12 +37,13 @@ const ResultsItem: FC<ResultsItemProps> = ({ user }) => {
 	}, [user.avatar_url, user.repos_count]);
 
 	const handleGoUser = () => {
-		if(user.repos_count){
+		if (user.repos_count) {
 			navigate(`/:${user.login}`, { state: { user } });
-		}else{
-			console.log("Еще не время");
+		} else if (user.repos_count === 0) {
+			navigate(`/:${user.login}`, { state: { user } });
+		} else {
+			console.log(user.repos_count, "Еще не время");
 		}
-	
 	};
 
 	const navigate = useNavigate();

@@ -1,12 +1,15 @@
-import { FC } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import {
 	Arrow,
+	Bar,
 	LoadButton,
+	LoaderContainer,
 	NumberOfPages,
 	Page,
 	PageLink,
 	SelectedPage,
 } from "./styles";
+import SearchContext from "../../../../Contexts/searchContext";
 
 interface ResultsPagesProps {
 	currentPage: number;
@@ -41,27 +44,62 @@ const ResultsPages: FC<ResultsPagesProps> = ({
 		}
 	};
 
+	const {
+	usersArray,
+} = useContext(SearchContext) ?? {
+	usersArray: [],
+};
+
+
+
+	const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
+useEffect(() => {
+	setIsDisabled(true);
+	if (usersArray.length !== 0) {
+		setTimeout(() => {
+			setIsDisabled(false);
+		}, 2000);
+	}
+}, [usersArray.length]);
+
 	return (
-		<>
-			{" "}
-			<NumberOfPages>
-				<Arrow onClick={handleLeft}>←</Arrow>
-				{visiblePageNumbers.map((pageNumber) => (
-					<Page key={pageNumber}>
-						<PageLink onClick={() => handlePageChange(pageNumber)}>
-							{pageNumber === currentPage ? (
-								<SelectedPage>{pageNumber}</SelectedPage>
-							) : (
-								pageNumber
-							)}
-						</PageLink>
-					</Page>
-				))}
-				<Arrow onClick={handleRight}>→</Arrow>
-				{searchIsRun ? "" : <LoadButton onClick={handleLoad}>Больше...</LoadButton>}
-			</NumberOfPages>
-		</>
-	);
+	<>
+		{" "}
+		<NumberOfPages>
+			<Arrow onClick={handleLeft}>←</Arrow>
+			{visiblePageNumbers.map((pageNumber) => (
+				<Page key={pageNumber}>
+					<PageLink onClick={() => handlePageChange(pageNumber)}>
+						{pageNumber === currentPage ? (
+							<SelectedPage>{pageNumber}</SelectedPage>
+						) : (
+							pageNumber
+						)}
+					</PageLink>
+				</Page>
+			))}
+			<Arrow onClick={handleRight}>→</Arrow>
+			{searchIsRun ? (
+				""
+			) : 
+			isDisabled ? (
+					<LoaderContainer className="loader">
+						<Bar className="bar1" />
+						<Bar className="bar2" />
+						<Bar className="bar3" />
+						<Bar className="bar4" />
+						<Bar className="bar5" />
+						<Bar className="bar6" />
+					</LoaderContainer>
+				) : (
+					<LoadButton disabled={isDisabled} onClick={handleLoad}>
+						Больше...
+					</LoadButton>
+				)}
+		</NumberOfPages>
+	</>
+);
 };
 
 export default ResultsPages;

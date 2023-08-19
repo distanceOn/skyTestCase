@@ -8,12 +8,15 @@ import {
 	RadioContainer,
 	RadioLabel,
 	RadioInput,
+	LoaderContainer,
+	Bar,
 } from "./styles";
 import SearchContext from "../../../Contexts/searchContext";
 
 const Search: React.FC = () => {
 	const {
 		usersArray,
+		setUsersArray,
 		searchValue,
 		setSearchValue,
 		fetchUsersByLogin,
@@ -21,6 +24,7 @@ const Search: React.FC = () => {
 		handleRadioChange,
 	} = useContext(SearchContext) ?? {
 		usersArray: [],
+		setUsersArray: () => {},
 		searchValue: "",
 		setSearchValue: () => {},
 		fetchUsersByLogin: () => {},
@@ -30,6 +34,7 @@ const Search: React.FC = () => {
 
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
+		setUsersArray([]);
 		fetchUsersByLogin(searchValue);
 	};
 
@@ -65,7 +70,14 @@ const Search: React.FC = () => {
 				<SearchInput value={searchValue} onChange={handleInputChange} />
 				<SearchButton>Найти</SearchButton>
 				{isDisabled ? (
-					<SearchContainer>Загрузка...</SearchContainer>
+					<LoaderContainer className="loader">
+						<Bar className="bar1" />
+						<Bar className="bar2" />
+						<Bar className="bar3" />
+						<Bar className="bar4" />
+						<Bar className="bar5" />
+						<Bar className="bar6" />
+					</LoaderContainer>
 				) : (
 					<RadioContainer>
 						<RadioLabel>

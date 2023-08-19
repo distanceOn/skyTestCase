@@ -1,40 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import styled from "styled-components";
 import ResultsPages from "./ResultsPages/ResultsPages";
 import { useContext, useEffect } from "react";
 import ResultsItem from "./ResultsItem/ResultsItem";
 import SearchContext from "../../../Contexts/searchContext";
+import { List, StyledSVG } from "./styles";
 
-const List = styled.ul`
-	width: 30vw;
-	height: 50vw;
-	border: none;
-	border-left: 1px solid black;
-	overflow-y: scroll;
-	padding: 1vw;
 
-	scrollbar-width: thin; /* для Firefox */
-	scrollbar-color: #fff #000; /* для Firefox */
-
-	&::-webkit-scrollbar {
-		width: 1px; /* Ширина полосы прокрутки */
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: #fff; /* Цвет полосы прокрутки */
-		border-radius: 4px; /* Закругление углов полосы прокрутки */
-	}
-
-	&::-webkit-scrollbar-thumb:hover {
-		background-color: #146634; /* Цвет полосы прокрутки при наведении курсора */
-		cursor: pointer;
-	}
-
-	&::-webkit-scrollbar-track {
-		background-color: #000; /* Цвет фона за полосой прокрутки */
-		border-radius: 4px; /* Закругление углов фона полосы прокрутки */
-	}
-`;
 
 const Results: React.FC = () => {
 	const {
@@ -56,9 +27,6 @@ const Results: React.FC = () => {
 		currentResults: [],
 		searchIsRun: false,
 	};
-
-
-
 
 	useEffect(() => {
 		console.log("UseEffect!");
@@ -87,7 +55,26 @@ const Results: React.FC = () => {
 	};
 
 	if (usersArray.length === 0) {
-		return <div>Loading...</div>; // Покажем сообщение о загрузке
+		
+		return (
+			<StyledSVG
+        className="spinner"
+        width="65px"
+        height="65px"
+        viewBox="0 0 66 66"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          className="path"
+          fill="none"
+          strokeWidth="6"
+          strokeLinecap="round"
+          cx="33"
+          cy="33"
+          r="30"
+        ></circle>
+      </StyledSVG>
+		); // Покажем сообщение о загрузке
 	}
 
 	return (
