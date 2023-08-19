@@ -36,6 +36,7 @@ export const Link = styled.a`
 	color: #000;
 	border-bottom: 1px solid green;
 	font-size: 1vw;
+	cursor: pointer;
 `;
 
 export const Repos = styled.div`

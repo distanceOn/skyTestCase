@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SearchContext from "../../Contexts/searchContext";
 import { useContext, useEffect } from "react";
@@ -39,6 +39,8 @@ const Details: React.FC = () => {
 	setCurrentPage: () => {},}
 ;
 
+	const navigate = useNavigate();
+
     const location = useLocation();
     const {avatar_url, repos_count, login, html_url} = location.state.user;
 
@@ -76,6 +78,10 @@ const Details: React.FC = () => {
 					<Link title="github" href={html_url} target="_blank">
 						Перейти в профиль
 					</Link>
+					<Link onClick={(e)=>{
+						e.preventDefault();
+						navigate('/');
+					}}>Назад</Link>
 				</User>
 			</Content>
 		</Wrapper>
